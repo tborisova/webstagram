@@ -1,0 +1,4 @@
+C:\Users\Dimitar\Documents\GitHub\SimpleHTTP\SimpleHTTP\bin\Release\SimpleHTTP.exe
+C:\Users\Dimitar\Documents\GitHub\SimpleHTTP\SimpleHTTP\bin\Release\SimpleHTTP.pdb
+C:\Users\Dimitar\Documents\GitHub\SimpleHTTP\SimpleHTTP\obj\x86\Release\SimpleHTTP.exe
+C:\Users\Dimitar\Documents\GitHub\SimpleHTTP\SimpleHTTP\obj\x86\Release\SimpleHTTP.pdb
