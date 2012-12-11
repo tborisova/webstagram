@@ -23,10 +23,15 @@ namespace SimpleHTTP
 
         static void server_OnPost(object sender, ClientConnectionEventArgs e)
         {
-            Console.WriteLine("GET request", ++connectionsCounter);
+            Console.WriteLine("POST request", ++connectionsCounter);
             e.Response.WriteLine("HTTP/1.1 200 OK");
             e.Response.WriteLine();
-            e.Response.Write(e.Request);
+            foreach (var header in e.HeaderData.Headers)
+            {
+                e.Response.WriteLine("{0}:{1}", header.Key, header.Value);
+            }
+            e.Response.WriteLine("Post data: ");
+            e.Response.Write(new string(e.PostData));
         }
 
         static void server_OnGet(object sender, ClientConnectionEventArgs e)

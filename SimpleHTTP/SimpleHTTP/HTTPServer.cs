@@ -41,48 +41,90 @@ namespace SimpleHTTP
         void StartClient(object parameter)
         {
             if (!(parameter is Tuple<TcpClient>)) return;
-
-            var tcpClient = (parameter as Tuple<TcpClient>).Item1;
-            var stream = tcpClient.GetStream();
-            byte[] message = new byte[4096];
-            int bytesRead;
-            var request = new StringBuilder();
-
-            while (true)
-            {
-                bytesRead = 0;
-
-                try
-                {
-                    bytesRead = ReadStream(stream, message, bytesRead);
-                }
-                catch
-                {
-                    break;
-                }
-
-                if (bytesRead == 0) break;
-
-                string read = GetEncodedString(message, bytesRead);
-                request.Append(read);
-                if (read.EndsWith(terminator)) break;
-            }
-            
             try
             {
+                var tcpClient = (parameter as Tuple<TcpClient>).Item1;
+                var stream = tcpClient.GetStream();
+                var reader = new StreamReader(stream);
+                string line;
+
+                var request = new StringBuilder();
+
+                while ((line=reader.ReadLine())!=null)
+                {
+                    if (line == string.Empty)
+                        break;
+                    request.AppendLine(line);
+                }
+            
+                var headerData = ParseHeaders(request.ToString());
+
+           
                 Console.WriteLine("HTTP request detected");
                 using (var writer = new StreamWriter(stream))
                 {
-                    writer.AutoFlush = true;
-                    if (IsHttpGet(request.ToString())) OnClientGetHandled(request.ToString(), writer);
-                    else if (IsHttpPost(request.ToString())) OnClientPostHandled(request.ToString(), writer);
+                    if (headerData.Method == MethodType.Get) 
+                        OnClientGetHandled(request.ToString(), writer, headerData);
+                    else if (headerData.Method == MethodType.Post)
+                    {
+                        if (!headerData.Headers.ContainsKey("content-length"))
+                            throw new HttpServerException("POST request does not contain content-length");
+                        char[] postData = ReadPostData(int.Parse(headerData.Headers["content-length"]), reader);
+                        OnClientPostHandled(request.ToString(), writer, headerData, postData);
+                    }
+                    writer.Flush();
                 }
+                CloseTcpClient(tcpClient, stream);
             }
             catch (Exception e)
             {
                 Console.Error.WriteLine("Exception generated while handling client: {0}", e.Message);
             }
-            CloseTcpClient(tcpClient, stream);
+            
+        }
+
+        private char[] ReadPostData(int length, StreamReader stream)
+        {
+            Console.WriteLine("Trying to read {0} bytes...", length);
+            char[] buffer = new char[length];
+            int realLength = stream.ReadBlock(buffer, 0, length);
+            if (realLength != length)
+            {
+                throw new HttpServerException(string.Format("Server expected a length of {0}, instead got {1}.", length, realLength));
+            }
+            return buffer;
+        }
+
+        private HttpInfo ParseHeaders(string headerString)
+        {
+            var stream = new StringReader(headerString);
+            string line;
+
+            string[] topLine = (stream.ReadLine()??string.Empty).Split(' ');
+            if (topLine.Length != 3) throw new HttpServerException("HTTP header not valid.");
+            string methodString = topLine[0];
+            MethodType method;
+            string uri = topLine[1];
+            Dictionary<string, string> headers = new Dictionary<string,string>();
+            switch (methodString.ToUpper())
+            {
+                case "POST":
+                    method = MethodType.Post;
+                    break;
+                case "GET":
+                    method = MethodType.Get;
+                    break;
+                default:
+                    throw new HttpServerException(string.Format("Invalid method {0}.", methodString));
+            }
+            
+
+            while ((line = stream.ReadLine()) != null)
+            {
+                string[] pair = line.Split(':');
+                headers.Add(pair[0].ToLower(), pair[1].TrimStart());
+            }
+            return new HttpInfo(headers, method, uri);
         }
 
         
@@ -91,18 +133,6 @@ namespace SimpleHTTP
         {
             var stringStream = new StringReader(request);
             return (stringStream.ReadLine() ?? string.Empty).Contains("HTTP");
-        }
-        private bool IsHttpGet(string request)
-        {
-            var stringStream = new StringReader(request);
-            return IsHttpRequest(request) &&
-                (stringStream.ReadLine() ?? string.Empty).Contains("GET");
-        }
-        private bool IsHttpPost(string request)
-        {
-            var stringStream = new StringReader(request);
-            return IsHttpRequest(request) &&
-                (stringStream.ReadLine() ?? string.Empty).Contains("POST");
         }
         private static string GetEncodedString(byte[] message, int bytesRead)
         {
@@ -125,15 +155,15 @@ namespace SimpleHTTP
             return bytesRead;//watcha thinkin?
         }
  
-        private void OnClientGetHandled(string request, StreamWriter writer)
+        private void OnClientGetHandled(string request, StreamWriter writer, HttpInfo headerData)
         {
             if (OnGet != null)
-                OnGet(this, new ClientConnectionEventArgs(request, writer));
+                OnGet(this, new ClientConnectionEventArgs(request, writer, headerData));
         }
-        private void OnClientPostHandled(string request, StreamWriter writer)
+        private void OnClientPostHandled(string request, StreamWriter writer, HttpInfo headerData, char[] postData)
         {
             if (OnPost != null)
-                OnPost(this, new ClientConnectionEventArgs(request, writer));
+                OnPost(this, new ClientConnectionEventArgs(request, writer, headerData, postData));
         }
         public event EventHandler<ClientConnectionEventArgs> OnGet;
         public event EventHandler<ClientConnectionEventArgs> OnPost;
