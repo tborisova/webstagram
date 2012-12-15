@@ -1,0 +1,21 @@
+# Test environment
+top_srcdir='/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10'
+top_builddir='/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10'
+
+set -a
+COMPARE="/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/utilities/compare"
+COMPOSITE="/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/utilities/composite"
+CONJURE="/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/utilities/conjure"
+CONVERT="/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/utilities/convert"
+DISPLAY="/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/utilities/display"
+IDENTIFY="/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/utilities/identify"
+MONTAGE="/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/utilities/montage" 
+VALIDATE="/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/tests/validate"
+DRAWTEST="/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/tests/drawtest"
+WANDTEST="/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/tests/wandtest"
+LD_LIBRARY_PATH="/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/magick/.libs:${LD_LIBRARY_PATH}"
+MAGICK_CODER_MODULE_PATH='/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/coders'
+MAGICK_CONFIGURE_PATH='/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/config:/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/config'
+MAGICK_FILTER_MODULE_PATH='/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/filters'
+PATH="/home/tsvetelina/kgm/webstagram/floreo/ImageMagick-6.8.0-10/utilities:${PATH}"
+set +a
