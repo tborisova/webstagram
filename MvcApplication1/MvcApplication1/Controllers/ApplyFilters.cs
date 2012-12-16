@@ -25,7 +25,10 @@ namespace CustomApplyFilterExtension
             //result += BitmapToString(imageProcessor.GetImage());
             result += BitmapToString(imageProcessor.Invert());
             result += BitmapToString(imageProcessor.Grayscale());
-            
+            result += BitmapToString(imageProcessor.Gamma(0.1,0.5,0.9)); // combo gamma filter from 0.0 to 1.0
+            result += BitmapToString(imageProcessor.Gamma(1.0, 0.0, 0.0)); // red gamma filter
+            result += BitmapToString(imageProcessor.Gamma(0.0, 1.0, 0.0)); // green gamma filter
+            result += BitmapToString(imageProcessor.Gamma(0.0, 0.0, 1.0)); // blue gamma filter
             return result;
         }
 
