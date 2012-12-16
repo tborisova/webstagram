@@ -89,7 +89,7 @@
             var res = '<img  id="imgInvert" src="' + dropbox.src + '" />';
             mainDiv.innerHTML += res;
 
-            var imgInvert = document.getElementById("imgInvert");
+            var imgInvert = document.getElementById("imgBG");
             
             if (imgInvert.complete) {	// make sure the image is fully loaded
                 var newimg = Pixastic.process(
@@ -99,8 +99,8 @@
                 imgInvert = newimg;
             }
             imgInvert.style.height = "300px";
-            //imgInvert.style.width = dropbox.style.width;
-            Filters.Invert = imgInvert;
+            imgInvert.style.width = dropbox.style.width;
+          //  Filters.Invert = imgInvert;
         }
 
         var Rad = 0;

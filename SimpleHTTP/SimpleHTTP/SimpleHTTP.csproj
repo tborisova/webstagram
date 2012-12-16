@@ -53,6 +53,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="dropHere.png" />
+    <Content Include="Images\dropHere.png" />
     <Content Include="index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
