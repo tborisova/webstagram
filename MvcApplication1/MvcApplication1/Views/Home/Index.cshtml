@@ -4,7 +4,7 @@
 
 <h2>@ViewBag.Message</h2>
 
-    To learn more about ASP.NET MVC visit <a href="http://asp.net/mvc" title="ASP.NET MVC Website">http://asp.net/mvc</a>.
+    Drag'n'Drop an image to get it filtered.
     <div id="mainDiv">
         <img id="imgBG" class="test" style=" border:1px solid #000" src="../../Images/dropHere.png" /> 
     </div>
@@ -66,13 +66,20 @@
                     // i dont think you can see it there
                 }
             })(file);
+          //  var date = new Date();
+          //  var starTime = date.getTime;
             loadXMLDoc(file);
+          //  var stopTime = date.getTime;
+            //alert((stopTime-starTime)/1000);
             // Read in the image file as a data url. 
             reader.readAsDataURL(file);
         }
         // this should be doing it with AJAX
         // i think i can find a pure JS way //ajax is pretty okay, but... where is the actual request? XMLhttpRequest? Great, but it has no params...
         function loadXMLDoc(file) {
+            var date = new Date();
+            var starTime = date.getTime;
+
             var reader = new FileReader(file);
             var xmlhttp;
             var txt, x, i;
@@ -135,7 +142,8 @@
                     //alert(arrayOfStrings.length);
                     var img;
                     var i;
-                    for (i = 0; i < arrayOfStrings.length; i++) {
+                    alert("Time to apply Filters: " + addCommas(arrayOfStrings[0]) + " miliseconds!");
+                    for (i = 1; i < arrayOfStrings.length; i++) {
                         img = document.createElement("IMG");
                         img.src = arrayOfStrings[i];
                         img.style.height = "300px";
@@ -150,12 +158,27 @@
             fd.append("fileUpload", file);
             xmlhttp.open("POST", "myImage/Image", true);
             xmlhttp.send(fd);
+            
+            var stopTime = date.getTime;
+           // alert((stopTime - starTime) / 1000);
         }
 
         function CreateImage() {
             var img = document.createElement("IMG");
             img.src = xmlhttp.responseText;
             document.getElementById("mainDiv").appendChild(img);
+        }
+
+        function addCommas(nStr) {
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
         }
     </script>
   

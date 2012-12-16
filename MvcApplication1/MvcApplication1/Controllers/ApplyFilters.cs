@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using ImageProcessing;
+using System.Diagnostics;
 
 namespace CustomApplyFilterExtension
 {
@@ -23,12 +24,30 @@ namespace CustomApplyFilterExtension
 
             //imageProcessor.ApplySepia(20);
             //result += BitmapToString(imageProcessor.GetImage());
+            Stopwatch s = new Stopwatch();
+            s.Start();
+
             result += BitmapToString(imageProcessor.Invert());
             result += BitmapToString(imageProcessor.Grayscale());
             result += BitmapToString(imageProcessor.Gamma(0.1,0.5,0.9)); // combo gamma filter from 0.0 to 1.0
             result += BitmapToString(imageProcessor.Gamma(1.0, 0.0, 0.0)); // red gamma filter
             result += BitmapToString(imageProcessor.Gamma(0.0, 1.0, 0.0)); // green gamma filter
             result += BitmapToString(imageProcessor.Gamma(0.0, 0.0, 1.0)); // blue gamma filter
+            //result += BitmapToString(imageProcessor.ColorFilter(1.0, 0.0, 0.0)); // red filter
+            //result += BitmapToString(imageProcessor.ColorFilter(0.0, 1.0, 0.0)); // green filter
+            //result += BitmapToString(imageProcessor.ColorFilter(0.0, 0.0, 1.0)); // blue filter
+            result += BitmapToString(imageProcessor.Sepia(20));
+            result += BitmapToString(imageProcessor.Contrast(50, true));
+            result += BitmapToString(imageProcessor.Contrast(50, false));
+            result += BitmapToString(imageProcessor.RealContrast(50, true));
+            result += BitmapToString(imageProcessor.RealContrast(50, false));
+            //imageProcessor.ApplyContrast(50);
+            //result += BitmapToString(imageProcessor.GetImage());
+            result += BitmapToString(imageProcessor.Brightness(50));
+            result += BitmapToString(imageProcessor.Brightness(-50));
+
+            s.Stop();
+            result = s.ElapsedMilliseconds + " " + result;
             return result;
         }
 

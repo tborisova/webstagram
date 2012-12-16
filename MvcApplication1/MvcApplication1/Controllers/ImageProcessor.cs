@@ -74,8 +74,7 @@ namespace ImageProcessing
                     for (int j = 0; j < bitmapData1.Width; j++)
                     {
                         // write the logic implementation here
-                        a = (imagePointer1[0] + imagePointer1[1] +
-                             imagePointer1[2]) / 3;
+                        a = (imagePointer1[0] + imagePointer1[1] + imagePointer1[2]) / 3;
                         imagePointer2[0] = (byte)a;
                         imagePointer2[1] = (byte)a;
                         imagePointer2[2] = (byte)a;
@@ -216,9 +215,9 @@ namespace ImageProcessing
                     {
                         // write the logic implementation here
                        // a = (imagePointer1[0] + imagePointer1[1] + imagePointer1[2]) / 3;
-                        imagePointer2[0] = blueGamma[imagePointer1[2]];
+                        imagePointer2[0] = blueGamma[imagePointer1[0]];
                         imagePointer2[1] = greenGamma[imagePointer1[1]];
-                        imagePointer2[2] = redGamma[imagePointer1[0]];
+                        imagePointer2[2] = redGamma[imagePointer1[2]];
                         imagePointer2[3] = imagePointer1[3];
                         //4 bytes per pixel
                         imagePointer1 += 4;
@@ -246,9 +245,7 @@ namespace ImageProcessing
             for (int i = 0; i < 256; ++i)
             {
                 redGamma[i]   = (byte)Math.Min(255, (int)((255.0 * Math.Pow(i / 255.0, 1.0 / r)) + 0.5));
-
-                greenGamma[i] = (byte)Math.Min(255, (int)((255.0 * Math.Pow(i / 255.0, 1.0 / g)) + 0.5));
-                
+                greenGamma[i] = (byte)Math.Min(255, (int)((255.0 * Math.Pow(i / 255.0, 1.0 / g)) + 0.5));                
                 blueGamma[i]  = (byte)Math.Min(255, (int)((255.0 * Math.Pow(i / 255.0, 1.0 / b)) + 0.5));
             }
 
@@ -264,6 +261,48 @@ namespace ImageProcessing
                     bitmapImage.SetPixel(x, y, Color.FromArgb((int)A, (int)R, (int)G, (int)B));
                 }
             }
+        }
+
+        public Bitmap ColorFilter(double r, double g, double b)
+        {
+            Bitmap image = GetImage();
+            Bitmap returnMap = new Bitmap(image.Width, image.Height,
+                                   PixelFormat.Format32bppArgb);
+            BitmapData bitmapData1 = image.LockBits(new Rectangle(0, 0,
+                                     image.Width, image.Height),
+                                     ImageLockMode.ReadOnly,
+                                     PixelFormat.Format32bppArgb);
+            BitmapData bitmapData2 = returnMap.LockBits(new Rectangle(0, 0,
+                                     returnMap.Width, returnMap.Height),
+                                     ImageLockMode.ReadOnly,
+                                     PixelFormat.Format32bppArgb);
+           // int a = 0;
+            unsafe
+            {
+                byte* imagePointer1 = (byte*)bitmapData1.Scan0;
+                byte* imagePointer2 = (byte*)bitmapData2.Scan0;
+                for (int i = 0; i < bitmapData1.Height; i++)
+                {
+                    for (int j = 0; j < bitmapData1.Width; j++)
+                    {
+                        // write the logic implementation here
+                        //a = (imagePointer1[0] + imagePointer1[1] + imagePointer1[2]) / 3;
+                        imagePointer2[0] = (byte)(imagePointer1[0] * b);
+                        imagePointer2[1] = (byte)(imagePointer1[1] * g);
+                        imagePointer2[2] = (byte)(imagePointer1[2] * r);
+                        imagePointer2[3] = imagePointer1[3];
+                        //4 bytes per pixel
+                        imagePointer1 += 4;
+                        imagePointer2 += 4;
+                    }
+                    //4 bytes per pixel
+                    imagePointer1 += bitmapData1.Stride - (bitmapData1.Width * 4);
+                    imagePointer2 += bitmapData1.Stride - (bitmapData1.Width * 4);
+                }
+            }
+            returnMap.UnlockBits(bitmapData2);
+            image.UnlockBits(bitmapData1);
+            return returnMap;
         }
 
         public void ApplyColorFilter(double r, double g, double b)
@@ -283,6 +322,60 @@ namespace ImageProcessing
                     bitmapImage.SetPixel(x, y, Color.FromArgb((int)A, (int)R, (int)G, (int)B));
                 }
             }
+        }
+
+        public Bitmap Sepia(int depth)
+        {
+            Bitmap image = GetImage();
+            Bitmap returnMap = new Bitmap(image.Width, image.Height,
+                                   PixelFormat.Format32bppArgb);
+            BitmapData bitmapData1 = image.LockBits(new Rectangle(0, 0,
+                                     image.Width, image.Height),
+                                     ImageLockMode.ReadOnly,
+                                     PixelFormat.Format32bppArgb);
+            BitmapData bitmapData2 = returnMap.LockBits(new Rectangle(0, 0,
+                                     returnMap.Width, returnMap.Height),
+                                     ImageLockMode.ReadOnly,
+                                     PixelFormat.Format32bppArgb);
+           // int a = 0;
+            unsafe
+            {
+                byte* imagePointer1 = (byte*)bitmapData1.Scan0;
+                byte* imagePointer2 = (byte*)bitmapData2.Scan0;
+                for (int i = 0; i < bitmapData1.Height; i++)
+                {
+                    for (int j = 0; j < bitmapData1.Width; j++)
+                    {
+                        // write the logic implementation here
+                       // a = (imagePointer1[0] + imagePointer1[1] + imagePointer1[2]) / 3;
+                       imagePointer2[0] = (byte)((0.299 * imagePointer1[2]) + (0.587 * imagePointer1[1]) + (0.114 * imagePointer1[0]));
+                       if(imagePointer2[0]+depth > 255)
+                       {
+                        imagePointer2[1] = 255;
+                       }else{
+                           imagePointer2[1] = (byte)(imagePointer2[0] + depth);//you could try the WPF libs, I think they are faster... eee tva mojeshe da mi go kajesh 2 4asa po rano :D tva e rabota za 20 min :D
+                       }
+                       if (imagePointer2[0] + (2* depth) > 255)
+                       {
+                           imagePointer2[2] = 255;
+                       }
+                       else
+                       {
+                           imagePointer2[2] = (byte)(imagePointer2[0] + (2*depth));
+                       }
+                        imagePointer2[3] = imagePointer1[3];
+                        //4 bytes per pixel
+                        imagePointer1 += 4;
+                        imagePointer2 += 4;
+                    }
+                    //4 bytes per pixel
+                    imagePointer1 += bitmapData1.Stride - (bitmapData1.Width * 4);
+                    imagePointer2 += bitmapData1.Stride - (bitmapData1.Width * 4);
+                }
+            }
+            returnMap.UnlockBits(bitmapData2);
+            image.UnlockBits(bitmapData1);
+            return returnMap;
         }
 
         public void ApplySepia(int depth)
@@ -345,6 +438,191 @@ namespace ImageProcessing
                 }
             }
 
+        }
+
+        public Bitmap Contrast(double contrast, bool fake)
+        {
+            Bitmap image = GetImage();
+            Bitmap returnMap = new Bitmap(image.Width, image.Height,
+                                   PixelFormat.Format32bppArgb);
+            BitmapData bitmapData1 = image.LockBits(new Rectangle(0, 0,
+                                     image.Width, image.Height),
+                                     ImageLockMode.ReadOnly,
+                                     PixelFormat.Format32bppArgb);
+            BitmapData bitmapData2 = returnMap.LockBits(new Rectangle(0, 0,
+                                     returnMap.Width, returnMap.Height),
+                                     ImageLockMode.ReadOnly,
+                                     PixelFormat.Format32bppArgb);
+           // int a = 0;
+            if (!fake)
+            {
+                contrast = (100.0 + contrast) / 100.0;
+                contrast *= contrast;
+            }
+            unsafe
+            {
+                byte* imagePointer1 = (byte*)bitmapData1.Scan0;
+                byte* imagePointer2 = (byte*)bitmapData2.Scan0;
+                for (int i = 0; i < bitmapData1.Height; i++)
+                {
+                    for (int j = 0; j < bitmapData1.Width; j++)
+                    {
+                        // write the logic implementation here
+                       // a = (imagePointer1[0] + imagePointer1[1] + imagePointer1[2]) / 3;
+                        imagePointer2[2] = (byte)(imagePointer1[2] / (byte)(255));
+                        imagePointer2[2] -= (byte)(0.5);
+                        imagePointer2[2] *= (byte)contrast;
+                        imagePointer2[2] += (byte)(0.5);
+                        imagePointer2[2] *= (byte)(255);
+                        if (imagePointer2[2] > 255)
+                        {
+                            imagePointer2[2] = 255;
+                        }
+                        else if (imagePointer2[2] < 0)
+                        {
+                            imagePointer2[2] = 0;
+                        }
+
+                        imagePointer2[1] = (byte)(imagePointer1[1] / (byte)(255));
+                        imagePointer2[1] -= (byte)(0.5);
+                        imagePointer2[1] *= (byte)contrast;
+                        imagePointer2[1] += (byte)(0.5);
+                        imagePointer2[1] *= (byte)(255);
+                        if (imagePointer2[1] > 255)
+                        {
+                            imagePointer2[1] = 255;
+                        }
+                        else if (imagePointer2[1] < 0)
+                        {
+                            imagePointer2[1] = 0;
+                        }
+
+                        imagePointer2[0] = (byte)(imagePointer1[0] / (byte)(255));
+                        imagePointer2[0] -= (byte)(0.5);
+                        imagePointer2[0] *= (byte)contrast;
+                        imagePointer2[0] += (byte)(0.5);
+                        imagePointer2[0] *= (byte)(255);
+                        if (imagePointer2[0] > 255)
+                        {
+                            imagePointer2[0] = 255;
+                        }
+                        else if (imagePointer2[0] < 0)
+                        {
+                            imagePointer2[0] = 0;
+                        }
+
+                        imagePointer2[3] = imagePointer1[3];
+                        //4 bytes per pixel
+                        imagePointer1 += 4;
+                        imagePointer2 += 4;
+                    }
+                    //4 bytes per pixel
+                    imagePointer1 += bitmapData1.Stride - (bitmapData1.Width * 4);
+                    imagePointer2 += bitmapData1.Stride - (bitmapData1.Width * 4);
+                }
+            }
+            returnMap.UnlockBits(bitmapData2);
+            image.UnlockBits(bitmapData1);
+            return returnMap;
+        }
+
+        public Bitmap RealContrast(double contrast, bool fake)
+        {
+            Bitmap image = GetImage();
+            Bitmap returnMap = new Bitmap(image.Width, image.Height,
+                                   PixelFormat.Format32bppArgb);
+            BitmapData bitmapData1 = image.LockBits(new Rectangle(0, 0,
+                                     image.Width, image.Height),
+                                     ImageLockMode.ReadOnly,
+                                     PixelFormat.Format32bppArgb);
+            BitmapData bitmapData2 = returnMap.LockBits(new Rectangle(0, 0,
+                                     returnMap.Width, returnMap.Height),
+                                     ImageLockMode.ReadOnly,
+                                     PixelFormat.Format32bppArgb);
+            // int a = 0;
+            if (!fake)
+            {
+                contrast = (100.0 + contrast) / 100.0;
+                contrast *= contrast;
+            }
+
+            double C;
+
+            unsafe
+            {
+                byte* imagePointer1 = (byte*)bitmapData1.Scan0;
+                byte* imagePointer2 = (byte*)bitmapData2.Scan0;
+                for (int i = 0; i < bitmapData1.Height; i++)
+                {
+                    for (int j = 0; j < bitmapData1.Width; j++)
+                    {
+                        // write the logic implementation here
+                        // a = (imagePointer1[0] + imagePointer1[1] + imagePointer1[2]) / 3;
+                        C = imagePointer1[2];
+                        C /= 255.0;
+                        C -= 0.5;
+                        C *= contrast;
+                        C += 0.5;
+                        C *= 255;
+                        if (C > 255)
+                        {
+                            C = 255;
+                        }
+                        else if (C < 0)
+                        {
+                            C = 0;
+                        }
+
+                        imagePointer2[2] = (byte)C;
+
+                        C = imagePointer1[1];
+                        C /= 255.0;
+                        C -= 0.5;
+                        C *= contrast;
+                        C += 0.5;
+                        C *= 255;
+                        if (C > 255)
+                        {
+                            C = 255;
+                        }
+                        else if (C < 0)
+                        {
+                            C = 0;
+                        }
+
+                        imagePointer2[1] = (byte)C;
+
+                        C = imagePointer1[0];
+                        C /= 255.0;
+                        C -= 0.5;
+                        C *= contrast;
+                        C += 0.5;
+                        C *= 255;
+                        if (C > 255)
+                        {
+                            C = 255;
+                        }
+                        else if (C < 0)
+                        {
+                            C = 0;
+                        }
+
+                        imagePointer2[0] = (byte)C;
+
+
+                        imagePointer2[3] = imagePointer1[3];
+                        //4 bytes per pixel
+                        imagePointer1 += 4;
+                        imagePointer2 += 4;
+                    }
+                    //4 bytes per pixel
+                    imagePointer1 += bitmapData1.Stride - (bitmapData1.Width * 4);
+                    imagePointer2 += bitmapData1.Stride - (bitmapData1.Width * 4);
+                }
+            }
+            returnMap.UnlockBits(bitmapData2);
+            image.UnlockBits(bitmapData1);
+            return returnMap;
         }
 
         public void ApplyContrast(double contrast)
@@ -411,6 +689,78 @@ namespace ImageProcessing
             }
 
         }
+
+        public Bitmap Brightness(int brightness)
+        {
+            Bitmap image = GetImage();
+            Bitmap returnMap = new Bitmap(image.Width, image.Height,
+                                   PixelFormat.Format32bppArgb);
+            BitmapData bitmapData1 = image.LockBits(new Rectangle(0, 0,
+                                     image.Width, image.Height),
+                                     ImageLockMode.ReadOnly,
+                                     PixelFormat.Format32bppArgb);
+            BitmapData bitmapData2 = returnMap.LockBits(new Rectangle(0, 0,
+                                     returnMap.Width, returnMap.Height),
+                                     ImageLockMode.ReadOnly,
+                                     PixelFormat.Format32bppArgb);
+           // int a = 0;
+            unsafe
+            {
+                byte* imagePointer1 = (byte*)bitmapData1.Scan0;
+                byte* imagePointer2 = (byte*)bitmapData2.Scan0;
+                for (int i = 0; i < bitmapData1.Height; i++)
+                {
+                    for (int j = 0; j < bitmapData1.Width; j++)
+                    {
+                        // write the logic implementation here
+                       // a = (imagePointer1[0] + imagePointer1[1] + imagePointer1[2]) / 3;
+                        imagePointer2[0] = (byte)(imagePointer1[0] + brightness);
+                        if (imagePointer2[0] > 255)
+                        {
+                            imagePointer2[0] = 255;
+                        }
+                        else if (imagePointer2[0] < 0)
+                        {
+                            imagePointer2[0] = 0;
+                        }
+
+                        imagePointer2[1] = (byte)(imagePointer1[1] + brightness);
+                        if (imagePointer2[1] > 255)
+                        {
+                            imagePointer2[1] = 255;
+                        }
+                        else if (imagePointer2[1] < 0)
+                        {
+                            imagePointer2[1] = 0;
+                        }
+
+                        imagePointer2[2] = (byte)(imagePointer1[2] + brightness);
+                        if (imagePointer2[2] > 255)
+                        {
+                            imagePointer2[2] = 255;
+                        }
+                        else if (imagePointer2[2] < 0)
+                        {
+                            imagePointer2[2] = 0;
+                        }
+
+
+                        imagePointer2[3] = imagePointer1[3];
+                        //4 bytes per pixel
+                        imagePointer1 += 4;
+                        imagePointer2 += 4;
+                    }
+                    //4 bytes per pixel
+                    imagePointer1 += bitmapData1.Stride - (bitmapData1.Width * 4);
+                    imagePointer2 += bitmapData1.Stride - (bitmapData1.Width * 4);
+                }
+            }
+            returnMap.UnlockBits(bitmapData2);
+            image.UnlockBits(bitmapData1);
+            return returnMap;
+        }
+
+
 
         public void ApplyBrightness(int brightness)
         {
