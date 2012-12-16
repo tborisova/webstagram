@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace ImageProcessing
 {
@@ -49,6 +50,94 @@ namespace ImageProcessing
         {
             return bitmapImage;
         }
+      
+        public Bitmap Grayscale()
+        {
+            Bitmap image = GetImage();
+            Bitmap returnMap = new Bitmap(image.Width, image.Height,
+                                   PixelFormat.Format32bppArgb);
+            BitmapData bitmapData1 = image.LockBits(new Rectangle(0, 0,
+                                     image.Width, image.Height),
+                                     ImageLockMode.ReadOnly,
+                                     PixelFormat.Format32bppArgb);
+            BitmapData bitmapData2 = returnMap.LockBits(new Rectangle(0, 0,
+                                     returnMap.Width, returnMap.Height),
+                                     ImageLockMode.ReadOnly,
+                                     PixelFormat.Format32bppArgb);
+            int a = 0;
+            unsafe 
+            {
+                byte* imagePointer1 = (byte*)bitmapData1.Scan0;
+                byte* imagePointer2 = (byte*)bitmapData2.Scan0;
+                for (int i = 0; i < bitmapData1.Height; i++)
+                {
+                    for (int j = 0; j < bitmapData1.Width; j++)
+                    {
+                        // write the logic implementation here
+                        a = (imagePointer1[0] + imagePointer1[1] +
+                             imagePointer1[2]) / 3;
+                        imagePointer2[0] = (byte)a;
+                        imagePointer2[1] = (byte)a;
+                        imagePointer2[2] = (byte)a;
+                        imagePointer2[3] = imagePointer1[3];
+                        //4 bytes per pixel
+                        imagePointer1 += 4;
+                        imagePointer2 += 4;
+                    }
+                    //4 bytes per pixel
+                    imagePointer1 += bitmapData1.Stride - (bitmapData1.Width * 4);
+                    imagePointer2 += bitmapData1.Stride - (bitmapData1.Width * 4);
+                }
+            }
+            returnMap.UnlockBits(bitmapData2);
+            image.UnlockBits(bitmapData1);
+            return returnMap;
+        }
+
+
+        public Bitmap Invert()
+        {
+            Bitmap image = GetImage();
+            Bitmap returnMap = new Bitmap(image.Width, image.Height,
+                                   PixelFormat.Format32bppArgb);
+            BitmapData bitmapData1 = image.LockBits(new Rectangle(0, 0,
+                                     image.Width, image.Height),
+                                     ImageLockMode.ReadOnly,
+                                     PixelFormat.Format32bppArgb);
+            BitmapData bitmapData2 = returnMap.LockBits(new Rectangle(0, 0,
+                                     returnMap.Width, returnMap.Height),
+                                     ImageLockMode.ReadOnly,
+                                     PixelFormat.Format32bppArgb);
+           // int a = 0;
+            unsafe
+            {
+                byte* imagePointer1 = (byte*)bitmapData1.Scan0;
+                byte* imagePointer2 = (byte*)bitmapData2.Scan0;
+                for (int i = 0; i < bitmapData1.Height; i++)
+                {
+                    for (int j = 0; j < bitmapData1.Width; j++)
+                    {
+                        // write the logic implementation here
+                        //a = (imagePointer1[0] + imagePointer1[1] + imagePointer1[2]) / 3;
+                        imagePointer2[0] = (byte)(255 - imagePointer1[0]);
+                        imagePointer2[1] = (byte)(255 - imagePointer1[1]);
+                        imagePointer2[2] = (byte)(255 - imagePointer1[2]);
+                        imagePointer2[3] = imagePointer1[3];
+                        //4 bytes per pixel
+                        imagePointer1 += 4;
+                        imagePointer2 += 4;
+                    }
+                    //4 bytes per pixel
+                    imagePointer1 += bitmapData1.Stride - (bitmapData1.Width * 4);
+                    imagePointer2 += bitmapData1.Stride - (bitmapData1.Width * 4);
+                }
+            }
+            returnMap.UnlockBits(bitmapData2);
+            image.UnlockBits(bitmapData1);
+            return returnMap;
+        }
+
+
 
         public void ApplyInvert()
         {
@@ -69,7 +158,7 @@ namespace ImageProcessing
             }
 
         }
-
+        // twa e stariq grayscale // vij kolko e prosti4uk да
         public void ApplyGreyscale()
         {
             byte A, R, G, B;

@@ -132,12 +132,13 @@
 
                     var response = xmlhttp.responseText;
                     var arrayOfStrings = response.split(" ");
-                    alert(arrayOfStrings.length);
+                    //alert(arrayOfStrings.length);
                     var img;
                     var i;
                     for (i = 0; i < arrayOfStrings.length; i++) {
                         img = document.createElement("IMG");
                         img.src = arrayOfStrings[i];
+                        img.style.height = "300px";
                         document.getElementById("mainDiv").appendChild(img);
                     }
 

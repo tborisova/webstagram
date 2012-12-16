@@ -18,12 +18,14 @@ namespace CustomApplyFilterExtension
             imageProcessor.SetImage(img);
             string result = null;
             
-            imageProcessor.ApplyInvert();
-            result += BitmapToString(imageProcessor.GetImage());
+            //imageProcessor.ApplyInvert();
+            //result += BitmapToString(imageProcessor.GetImage());
 
-            imageProcessor.ApplySepia(20);
-            result += BitmapToString(imageProcessor.GetImage());
-
+            //imageProcessor.ApplySepia(20);
+            //result += BitmapToString(imageProcessor.GetImage());
+            result += BitmapToString(imageProcessor.Invert());
+            result += BitmapToString(imageProcessor.Grayscale());
+            
             return result;
         }
 
