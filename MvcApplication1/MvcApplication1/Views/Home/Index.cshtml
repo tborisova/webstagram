@@ -8,11 +8,10 @@
     <div id="mainDiv">
         <img id="imgBG" class="test" style=" border:1px solid #000" src="../../Images/dropHere.png" /> 
     </div>
+    <div id="resultDiv"></div>
     <script>
         var dropbox = document.getElementById('imgBG');
         var mainDiv = document.getElementById('mainDiv');
-        var Filters = {};
-        arr = [];
 
         //dropbox.style.height = "500px";
         // Setup drag and drop handlers. 
@@ -26,56 +25,42 @@
             e.preventDefault();
         }
 
-
         function onDrop(e) {
             e.stopPropagation();
             e.preventDefault();
 
             var readFileSize = 0;
             var files = e.dataTransfer.files;
-
+           
 
             file = files[0];
             readFileSize += file.fileSize;
 
-
             // Only process image files. 
             var imageType = /image.*/;
-            // princpno do kolkoto mojah da razbera ajax-a trqbwa da dobavqme kum xmlhttp ili tam imashe oshte edno s http ama beshe za string 
 
-            if (!file.type.match(imageType)) {// i kato dobavim kum nego proverqwame purvo dali servera ni e dal neshto i ako ne e mu prashtama 
+            if (!file.type.match(imageType)) {
                 return;
             }
 
-
             var reader = new FileReader();
-
 
             reader.onerror = function (e) {
                 alert('Error code: ' + e.target.error);
             };
 
-
             // Create a closure to capture the file information. 
             reader.onload = (function (aFile) {
                 return function (evt) {
-                    dropbox.src = evt.target.result;                 // what I am trying to do is being able to get this image's source. the image is up there look
-                    dropbox.style.height = "300px"; 
-                    Filters.dropbox = dropbox;
-                    Generate();
-                    // i dont think you can see it there
+                    dropbox.src = evt.target.result;
+                    dropbox.style.height = "300px";
+                    document.getElementById("resultDiv").innerHTML = null;
                 }
             })(file);
-          //  var date = new Date();
-          //  var starTime = date.getTime;
             loadXMLDoc(file);
-          //  var stopTime = date.getTime;
-            //alert((stopTime-starTime)/1000);
             // Read in the image file as a data url. 
             reader.readAsDataURL(file);
         }
-        // this should be doing it with AJAX
-        // i think i can find a pure JS way //ajax is pretty okay, but... where is the actual request? XMLhttpRequest? Great, but it has no params...
         function loadXMLDoc(file) {
             var date = new Date();
             var starTime = date.getTime;
@@ -91,76 +76,24 @@
             }
             xmlhttp.onreadystatechange = function () {
                 if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    //document.getElementById("mainDiv").appendChild = xmlhttp.responseText;
-                    //var myArray = eval( xmlHttp.responseText );
-                  //  var arrayOfStrings = xmlHttp.responseText.split(";");
-                 //   for (var i = 0; i < arrayOfStrings.length; i++)
-                  //      alert(arrayOfStrings[i] + " / ");
-                   // var img = document.createElement("IMG");
-                   // img.src = arrayOfStrings[0] + ";" + arrayOfStrings[1];
-                    //  document.getElementById("mainDiv").appendChild(img);//gut
-                    //alert(xmlHttp.responseText);
-                    //var asd = xmlHttp.responseText
-                    //var arrayOfStrings = asd.split(";");
-                    //alert(arrayOfStrings.length);
-                    //var img = document.createElement("IMG");
-                    //img.src = arrayOfStrings[0] + ";" + arrayOfStrings[1];
-                    //document.getElementById("mainDiv").appendChild(img);
-
-
-
-                  //  xmlDoc = xmlhttp.responseXML;
-                  ////  alert("1");
-                  //  txt = "";
-                  //  alert(xmlhttp.responseType);
-                  //  x = xmlDoc.getElementsByTagName("Image");
-                  //  alert("2");
-                  //  alert(x);
-                  //  for (i = 0; i < x.length; i++) {
-                  //      txt = txt + x[i].childNodes[0].nodeValue + "<br>";
-                  //  }
-                  //  document.getElementById("mainDiv").innerHTML = txt;
-
-                    //var img = document.createElement("IMG");
-                    //img.src = xmlhttp.responseText;
-                    //document.getElementById("mainDiv").appendChild(img);
-
-                    //// this works
-                    //var response = xmlhttp.responseText;
-                    //var arrayOfStrings = response.split(" ");
-                    //alert(arrayOfStrings.length);
-                    //var img = document.createElement("IMG");
-                    //img.src = arrayOfStrings[0];
-                    //document.getElementById("mainDiv").appendChild(img);
-                    //var img2 = document.createElement("IMG");
-                    //img2.src = arrayOfStrings[1];
-                    //document.getElementById("mainDiv").appendChild(img2);
-                    ////end of work progress
-
                     var response = xmlhttp.responseText;
                     var arrayOfStrings = response.split(" ");
-                    //alert(arrayOfStrings.length);
                     var img;
                     var i;
-                    alert("Time to apply Filters: " + addCommas(arrayOfStrings[0]) + " miliseconds!");
                     for (i = 1; i < arrayOfStrings.length; i++) {
                         img = document.createElement("IMG");
                         img.src = arrayOfStrings[i];
                         img.style.height = "300px";
-                        document.getElementById("mainDiv").appendChild(img);
+                        document.getElementById("resultDiv").appendChild(img);
                     }
-
                 }
             }
-            //къде го взимаш ъъъъъъъ  // actually i really have no idea how  do it :D i just tried to mimic the one from the w3schools tutorial
+
             var fd = new FormData();
             
             fd.append("fileUpload", file);
             xmlhttp.open("POST", "myImage/Image", true);
             xmlhttp.send(fd);
-            
-            var stopTime = date.getTime;
-           // alert((stopTime - starTime) / 1000);
         }
 
         function CreateImage() {
@@ -169,17 +102,17 @@
             document.getElementById("mainDiv").appendChild(img);
         }
 
-        function addCommas(nStr) {
-            nStr += '';
-            x = nStr.split('.');
-            x1 = x[0];
-            x2 = x.length > 1 ? '.' + x[1] : '';
-            var rgx = /(\d+)(\d{3})/;
-            while (rgx.test(x1)) {
-                x1 = x1.replace(rgx, '$1' + ',' + '$2');
-            }
-            return x1 + x2;
-        }
+        //function addCommas(nStr) {
+        //    nStr += '';
+        //    x = nStr.split('.');
+        //    x1 = x[0];
+        //    x2 = x.length > 1 ? '.' + x[1] : '';
+        //    var rgx = /(\d+)(\d{3})/;
+        //    while (rgx.test(x1)) {
+        //        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        //    }
+        //    return x1 + x2;
+        //}
     </script>
   
 

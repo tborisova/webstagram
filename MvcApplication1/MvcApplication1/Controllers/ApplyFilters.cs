@@ -18,18 +18,13 @@ namespace CustomApplyFilterExtension
         {
             imageProcessor.SetImage(img);
             string result = null;
-            
-            //imageProcessor.ApplyInvert();
-            //result += BitmapToString(imageProcessor.GetImage());
 
-            //imageProcessor.ApplySepia(20);
-            //result += BitmapToString(imageProcessor.GetImage());
             Stopwatch s = new Stopwatch();
             s.Start();
 
             result += BitmapToString(imageProcessor.Invert());
             result += BitmapToString(imageProcessor.Grayscale());
-            result += BitmapToString(imageProcessor.Gamma(0.1,0.5,0.9)); // combo gamma filter from 0.0 to 1.0
+            result += BitmapToString(imageProcessor.Gamma(0.1, 0.5, 0.9)); // combo gamma filter from 0.0 to 1.0
             result += BitmapToString(imageProcessor.Gamma(1.0, 0.0, 0.0)); // red gamma filter
             result += BitmapToString(imageProcessor.Gamma(0.0, 1.0, 0.0)); // green gamma filter
             result += BitmapToString(imageProcessor.Gamma(0.0, 0.0, 1.0)); // blue gamma filter
@@ -37,7 +32,7 @@ namespace CustomApplyFilterExtension
             //result += BitmapToString(imageProcessor.ColorFilter(0.0, 1.0, 0.0)); // green filter
             //result += BitmapToString(imageProcessor.ColorFilter(0.0, 0.0, 1.0)); // blue filter
             result += BitmapToString(imageProcessor.Sepia(20));
-            result += BitmapToString(imageProcessor.Contrast(50, true));
+            //result += BitmapToString(imageProcessor.Contrast(50, true));
             result += BitmapToString(imageProcessor.Contrast(50, false));
             result += BitmapToString(imageProcessor.RealContrast(50, true));
             result += BitmapToString(imageProcessor.RealContrast(50, false));
@@ -45,6 +40,8 @@ namespace CustomApplyFilterExtension
             //result += BitmapToString(imageProcessor.GetImage());
             result += BitmapToString(imageProcessor.Brightness(50));
             result += BitmapToString(imageProcessor.Brightness(-50));
+            //result += BitmapToString(imageProcessor.MyBlur(13));
+            imageProcessor.UnlockImage();
 
             s.Stop();
             result = s.ElapsedMilliseconds + " " + result;

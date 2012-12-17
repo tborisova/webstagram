@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace MvcApplication1.Controllers
 {
+    [ValidateInput(false)]
     public class HomeController : Controller
     {
         public ActionResult Index()
