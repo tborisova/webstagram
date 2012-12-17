@@ -2,17 +2,19 @@
     ViewBag.Title = "Home Page";
 }
 
-<h2>@ViewBag.Message</h2>
-
-    Drag'n'Drop an image to get it filtered.
-    <div id="mainDiv">
-        <img id="imgBG" class="test" style=" border:1px solid #000" src="../../Images/dropHere.png" /> 
+    <div id="dropField">
+        <div id="myimgdiv">
+        <img id="imgBG" class="test" src="../../Images/dropfield.png" />
+            </div> 
+        <div id="resultDiv"></div>
     </div>
-    <div id="resultDiv"></div>
+
+    
+
     <script>
         var dropbox = document.getElementById('imgBG');
-        var mainDiv = document.getElementById('mainDiv');
-
+        var mainDiv = document.getElementById('dropField');
+        var myFilterNames = new Array(" ", "Invert", "Grayscale", "ComboGamma", "RedGamma", "GreenGamma", "BlueGammа", "Sepia", "Contrast", "TrueRealContrast", "FalseRealContrast", "BrightnessP", "BrightnessN");
         //dropbox.style.height = "500px";
         // Setup drag and drop handlers. 
         dropbox.addEventListener('dragenter', stopDefault, false);
@@ -28,6 +30,7 @@
         function onDrop(e) {
             e.stopPropagation();
             e.preventDefault();
+            
 
             var readFileSize = 0;
             var files = e.dataTransfer.files;
@@ -52,9 +55,11 @@
             // Create a closure to capture the file information. 
             reader.onload = (function (aFile) {
                 return function (evt) {
-                    dropbox.src = evt.target.result;
-                    dropbox.style.height = "300px";
-                    document.getElementById("resultDiv").innerHTML = null;
+                    //dropbox.src = evt.target.result;
+                   // dropbox.style.height = "300px";
+                    //document.getElementById("resultDiv").innerHTML = null;
+                    //document.getElementById("DropField").innerHTML = null;
+                    
                 }
             })(file);
             loadXMLDoc(file);
@@ -62,8 +67,8 @@
             reader.readAsDataURL(file);
         }
         function loadXMLDoc(file) {
-            var date = new Date();
-            var starTime = date.getTime;
+            //var date = new Date();
+            //var starTime = date.getTime;
 
             var reader = new FileReader(file);
             var xmlhttp;
@@ -78,13 +83,24 @@
                 if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                     var response = xmlhttp.responseText;
                     var arrayOfStrings = response.split(" ");
+                    //alert("Filters applied for:" + arrayOfStrings[0] + " miliseconds!");
                     var img;
                     var i;
+                    document.getElementById("myimgdiv").innerHTML = null;
                     for (i = 1; i < arrayOfStrings.length; i++) {
                         img = document.createElement("IMG");
+                        
+                        img.id = myFilterNames[i];
+                        img.style.height = "88px";
                         img.src = arrayOfStrings[i];
-                        img.style.height = "300px";
+                        
                         document.getElementById("resultDiv").appendChild(img);
+                        //document.getElementById(myFilterNames[i]).onclick = function ()  {
+                        //    var fd = new FormData();
+                        //    fd.append("fileUpload", file);
+                        //    xmlhttp.open("POST", "Filters/ApplyFilter1", true);
+                        //    xmlhttp.send(fd);
+                        //}
                     }
                 }
             }
@@ -92,14 +108,16 @@
             var fd = new FormData();
             
             fd.append("fileUpload", file);
-            xmlhttp.open("POST", "myImage/Image", true);
+            xmlhttp.open("POST", "Filters/GetThumbnails", true);
             xmlhttp.send(fd);
         }
-
+        function ThisIsClicked(shit){
+            alert(shit);
+        }
         function CreateImage() {
             var img = document.createElement("IMG");
             img.src = xmlhttp.responseText;
-            document.getElementById("mainDiv").appendChild(img);
+            document.getElementById("dropField").appendChild(img);
         }
 
         //function addCommas(nStr) {

@@ -171,7 +171,9 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Images\background.png" />
     <Content Include="Images\dragon.jpg" />
+    <Content Include="Images\dropfield.png" />
     <Content Include="Images\dropHere.png" />
     <Content Include="Scripts\dragdrop.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />

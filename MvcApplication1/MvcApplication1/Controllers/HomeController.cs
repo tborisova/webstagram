@@ -11,8 +11,6 @@ namespace MvcApplication1.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = "Fl*ricam";
-
             return View();
         }
 
