@@ -20,15 +20,18 @@ namespace MvcApplication1.Controllers
         {
             return View();
         }
-
+        private static Bitmap DroppedImage;
+        private static String FileName;
         [HttpPost]
         public object GetThumbnails(HttpPostedFileBase fileUpload)
         {
             var stream = fileUpload.InputStream;
             Bitmap img = new Bitmap(stream);
+            DroppedImage = img;
+            FileName = fileUpload.FileName;
             int height = (int)(img.Height / ((float)img.Width / 500f));
             img = ResizeBitmap(img, 500, height);
-            img.Save(string.Format(@"C:\Users\Dimitar\Pictures\test\{0} {1}.jpg", Path.GetFileNameWithoutExtension(fileUpload.FileName), DateTime.Now.Ticks));
+            img.Save(string.Format(@"C:\Users\Dimitar\Pictures\test\{0} {1}.jpg", Path.GetFileNameWithoutExtension(FileName), DateTime.Now.Ticks));
             return img.ApplyFilters();
         }
 
@@ -41,9 +44,9 @@ namespace MvcApplication1.Controllers
         }
 
   
-        public FileResult ApplyFilter1(HttpPostedFileBase fileUpload)
+        public FileResult ApplyFilter1(HttpPostedFileBase filterUpload)
         {   //invert
-            var stream = fileUpload.InputStream;
+            var stream = filterUpload.InputStream;
             Bitmap img = new Bitmap(stream);
             var ip = new ImageProcessor();
             ip.SetImage(img);
@@ -51,7 +54,19 @@ namespace MvcApplication1.Controllers
             MemoryStream str = new MemoryStream();
             result.Save(str, ImageFormat.Png);
             str.Close();
-            return File(str.GetBuffer(), string.Format("{0}_inverted.png", Path.GetFileNameWithoutExtension(fileUpload.FileName)));
+            return File(str.GetBuffer(),"application/octet-stream", string.Format("{0}_inverted.png", Path.GetFileNameWithoutExtension(filterUpload.FileName)));
+        }
+
+        public FileResult Invert(HttpPostedFileBase filterUploads) 
+        {   //invert
+            var ip = new ImageProcessor();
+            ip.SetImage(DroppedImage);
+            var result = ip.Invert();
+            ip.UnlockImage();
+            MemoryStream str = new MemoryStream();
+            result.Save(str, ImageFormat.Png);
+            str.Close();
+            return File(str.GetBuffer(),"application/octet-stream", string.Format("{0}_inverted.png", Path.GetFileNameWithoutExtension(FileName)));
         }
 
     }

@@ -7,6 +7,7 @@
         <img id="imgBG" class="test" src="../../Images/dropfield.png" />
             </div> 
         <div id="resultDiv"></div>
+        <a href="../../Filters/ApplyFilter1" target="_blank">asd</a>
     </div>
 
     
@@ -86,21 +87,20 @@
                     //alert("Filters applied for:" + arrayOfStrings[0] + " miliseconds!");
                     var img;
                     var i;
+                    var a;
                     document.getElementById("myimgdiv").innerHTML = null;
                     for (i = 1; i < arrayOfStrings.length; i++) {
+                        a = document.createElement("a");
+                        a.id = "url" + myFilterNames[i];
+                        a.href = "../../Filters/" + myFilterNames[i];
+                        document.getElementById("resultDiv").appendChild(a);
                         img = document.createElement("IMG");
                         
                         img.id = myFilterNames[i];
                         img.style.height = "88px";
                         img.src = arrayOfStrings[i];
                         
-                        document.getElementById("resultDiv").appendChild(img);
-                        //document.getElementById(myFilterNames[i]).onclick = function ()  {
-                        //    var fd = new FormData();
-                        //    fd.append("fileUpload", file);
-                        //    xmlhttp.open("POST", "Filters/ApplyFilter1", true);
-                        //    xmlhttp.send(fd);
-                        //}
+                        document.getElementById("url" + myFilterNames[i]).appendChild(img);
                     }
                 }
             }
