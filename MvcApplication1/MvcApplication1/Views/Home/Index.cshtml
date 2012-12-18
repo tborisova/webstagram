@@ -4,10 +4,9 @@
 
     <div id="dropField">
         <div id="myimgdiv">
-        <img id="imgBG" class="test" src="../../Images/dropfield.png" />
-            </div> 
+            <img id="imgBG" class="test" src="../../Images/dropfield.png" />
+        </div> 
         <div id="resultDiv"></div>
-        <a href="../../Filters/ApplyFilter1" target="_blank">asd</a>
     </div>
 
     
@@ -15,7 +14,7 @@
     <script>
         var dropbox = document.getElementById('imgBG');
         var mainDiv = document.getElementById('dropField');
-        var myFilterNames = new Array(" ", "Invert", "Grayscale", "ComboGamma", "RedGamma", "GreenGamma", "BlueGammа", "Sepia", "Contrast", "TrueRealContrast", "FalseRealContrast", "BrightnessP", "BrightnessN");
+        var myFilterNames = new Array(" ", "Invert", "Grayscale", "ComboGamma", "RedGamma", "GreenGamma", "BlueGammа", "Sepia", "Contrast", "TrueRealContrast", "FalseRealContrast", "PositiveBrightness", "NegativeBrightness");
         //dropbox.style.height = "500px";
         // Setup drag and drop handlers. 
         dropbox.addEventListener('dragenter', stopDefault, false);
@@ -68,9 +67,6 @@
             reader.readAsDataURL(file);
         }
         function loadXMLDoc(file) {
-            //var date = new Date();
-            //var starTime = date.getTime;
-
             var reader = new FileReader(file);
             var xmlhttp;
             var txt, x, i;
@@ -89,28 +85,26 @@
                     var i;
                     var a;
                     document.getElementById("myimgdiv").innerHTML = null;
-                    for (i = 1; i < arrayOfStrings.length; i++) {
+                    for (i = 1; i < 13; i++) {
                         a = document.createElement("a");
                         a.id = "url" + myFilterNames[i];
                         a.href = "../../Filters/" + myFilterNames[i];
                         document.getElementById("resultDiv").appendChild(a);
                         img = document.createElement("IMG");
-                        
                         img.id = myFilterNames[i];
                         img.style.height = "88px";
+                        img.style.width = "136px";
                         img.src = arrayOfStrings[i];
-                        
                         document.getElementById("url" + myFilterNames[i]).appendChild(img);
                     }
                 }
             }
-
             var fd = new FormData();
-            
             fd.append("fileUpload", file);
             xmlhttp.open("POST", "Filters/GetThumbnails", true);
             xmlhttp.send(fd);
         }
+
         function ThisIsClicked(shit){
             alert(shit);
         }

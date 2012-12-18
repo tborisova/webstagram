@@ -55,10 +55,12 @@ namespace CustomApplyFilterExtension
             {
                 img.Save(memoryStream, ImageFormat.Jpeg);
                 byte[] bitmapBytes = memoryStream.GetBuffer();
-                bitmapString = Convert.ToBase64String(bitmapBytes, Base64FormattingOptions.InsertLineBreaks);
+                bitmapString = Convert.ToBase64String(bitmapBytes, 
+                    Base64FormattingOptions.InsertLineBreaks);
             }
             bitmapString = "data:image/jpeg;base64," + bitmapString + " ";
             return bitmapString;
         }
+
     }
 }
