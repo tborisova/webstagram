@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcApplication1", "MvcApplication1\MvcApplication1.csproj", "{18917F2A-616A-4B34-AA1C-4E717F06E1BA}"
+# Visual Studio Express 2012 for Web
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flowercam", "MvcApplication1\Flowercam.csproj", "{18917F2A-616A-4B34-AA1C-4E717F06E1BA}"
 EndProject
 Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "ModelingProject1", "ModelingProject1\ModelingProject1.modelproj", "{A2291BBD-9083-4FE7-9327-6BE6AD8181AD}"
 EndProject
