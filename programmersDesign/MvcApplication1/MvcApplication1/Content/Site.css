@@ -1,0 +1,45 @@
+﻿
+
+/*table.outter {
+    margin-top: -5px;
+    text-decoration: none;
+    background-color: #ffffff;
+    border: 7px solid #2175bc;
+    border-top: 0px;
+    width: 745px;
+    empty-cells: hide;
+}*/
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    /*background-image:url("../../Images/dropfield.png");*/
+}
+
+/*table.dropped {
+    margin-left:0px;
+}*/
+
+/*body {
+    font: "Trebuchet MS", Verdana, sans-serif;
+    background-color: white;
+    color: #696969;
+    height: 770px;
+}*/
+
+h1 {
+    border-bottom: 3px solid #cc9900;
+    font: Georgia, serif;
+    color: #996600;
+}
+
+body
+{
+    font-family:Sans-serif;
+    font-size:13px;
+    padding:20px;    
+}
+
+.hc-name, a{ color: #932121}
+.highlight{padding:5px; background:#ffffaa;margin-bottom:10px;font-weight:bold;}
