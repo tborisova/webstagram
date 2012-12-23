@@ -16,7 +16,9 @@ table {
     text-align: center;
     /*background-image:url("../../Images/dropfield.png");*/
 }
-
+.ui {
+vertical-align:text-top;
+}
 /*table.dropped {
     margin-left:0px;
 }*/
@@ -40,6 +42,11 @@ body
     font-size:13px;
     padding:20px;    
 }
-
+.thumbnail {
+z-index:1;
+}
+.s-desc {
+z-index:500;
+}
 .hc-name, a{ color: #932121}
 .highlight{padding:5px; background:#ffffaa;margin-bottom:10px;font-weight:bold;}

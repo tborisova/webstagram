@@ -47,7 +47,7 @@
 
         //Set defauls for the control
         var defaults = {
-            width: 300,
+            width: 250-20 + 6,
             openOnLeft: false,
             openOnTop: false,
             cardImgSrc: "",
@@ -73,8 +73,8 @@
             var hovercardTempCSS = '<style id="css-hovercard" type="text/css">' +
                                     '.hc-preview { position: relative; display:inline; }' +
                                     '.hc-name { font-weight:bold; position:relative; display:inline-block; }' +
-                                    '.hc-details { margin-top:0px; left:-80px; margin-right:0px; font-family:Sans-serif !important; font-size:12px !important; color:#666 !important; line-height:1.5em; border:solid 1px #ddd; position:absolute;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;top:-10px;padding:2em 10px 10px;-moz-box-shadow:5px 5px 5px #888;-webkit-box-shadow:5px 5px 5px #888;box-shadow:5px 5px 5px #888;display:none;}' +
-                                    '.hc-pic { width:350px; margin-top:-1em; float:right;  }' +
+                                    '.hc-details { margin-top:0px; left:-3px; margin-right:0px; font-family:Sans-serif !important; font-size:12px !important; color:#666 !important; line-height:1.5em; border:solid 1px #ddd; position:absolute;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;top:-10px;padding:2em 10px 10px;-moz-box-shadow:5px 5px 5px #888;-webkit-box-shadow:5px 5px 5px #888;box-shadow:5px 5px 5px #888;display:none;}' +
+                                    '.hc-pic {  margin-top:-1em; float:right;  }' +
                                     '.hc-details-open-left { left: auto; right:-10px; text-align:right; margin-left:80px; margin-right:0; } ' +
                                     '.hc-details-open-left > .hc-pic { float:left; } ' +
                                     '.hc-details-open-top { bottom:-10px; top:auto; padding: 10px 10px 2em;} ' +
@@ -83,7 +83,7 @@
                                     '.hc-details .s-card-pad{ border-top: solid 1px #eee; margin-top:10px; padding-top:10px; overflow:hidden; } ' +
                                     '.hc-details-open-top .s-card-pad { border:none; border-bottom: solid 100px #fff; margin-top:0;padding-top:0; margin-bottom:10px;padding-bottom:10px; }' +
                                     '.hc-details .s-card .s-strong{ font-weight:bold; color: #555; } ' +
-                                    '.hc-details .s-img{  margin-right: 10px; max-width: 350px;} ' +
+                                    '.hc-details .s-img{  margin-right: 10px; } ' +
                                     '.hc-details .s-name{ color:#222; font-weight:bold;} ' +
                                     '.hc-details .s-loc{ float:left;}' +
                                     '.hc-details-open-left .s-loc{ float:right;} ' +
@@ -129,7 +129,7 @@
 
                 //Up the z indiex for the .hc-name to overlay on .hc-details
                 $this.css("z-index", "200");
-                obj.css("z-index", "100").find('.hc-details').css("z-index", "150");
+                obj.css("z-index", "100").find('.hc-details').css("z-index", "250");
 
                 var curHCDetails = $this.find(".hc-details").eq(0);
                 curHCDetails.stop(true, true).delay(options.delay).fadeIn();
@@ -188,7 +188,7 @@
                 //Undo the z indices 
                 $this = $(this);
 
-                $this.find(".hc-details").eq(0).stop(true, true).fadeOut(300, function () {
+                $this.find(".hc-details").eq(0).stop(true, true).fadeOut(100, function () {
                     $this.css("z-index", "0");
                     obj.css("z-index", "0").find('.hc-details').css("z-index", "0");
 

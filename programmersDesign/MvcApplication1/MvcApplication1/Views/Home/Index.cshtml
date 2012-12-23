@@ -4,15 +4,26 @@
 
 <table id="page">
     <tr id="design">
-        <td>
+        <td class="ui">
             <table id="table">
                 <tr>
                     <td>
-                        <img id="logo" src="../../Images/myFlowerCamLogo.png"></td>
+                        <img id="logo" src="../../Images/myFlowerCamLogo.png">
+                    </td>
                 </tr>
                 <tr id="dropField">
                     <td>
                         <img id="dropImg" src="../../Images/dropfield.png">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img width="610" height="100" id="loginForm" src="../../Images/logInForm.png">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img width="610" height="50" id="loginButton" src="../../Images/logInButton.png">
                     </td>
                 </tr>
             </table>
@@ -115,6 +126,9 @@
                 $("#page").animate({ marginLeft: "0px" }, "slow", "swing");
                 $("#logo").animate({ width: "325px" }, "slow", "swing");
                 $("#dropImg").animate({ width: "300px" }, "slow", "swing");
+                $("#loginForm").animate({ width: "300px" }, "slow", "swing");
+                $("#loginButton").animate({ width: "300px" }, "slow", "swing");
+
                 //over and out
                 document.getElementById("filters").innerHTML = null;
                 for (i = 1; i < 13; i += 4) {
@@ -138,7 +152,7 @@
                         img = document.createElement("img");
                         img.className = "thumbnail";
                         img.id = myFilterNames[j];
-                        img.style.width = "150px";
+                        img.style.width = "250px";
                         img.src = arrayOfStrings[j];
 
                         //img.addEventListener("mouseover", mouseyIsOver, false);
@@ -181,8 +195,18 @@
                 }
                 document.getElementById("filters").appendChild(table);
                 $('#filters').show('slow');
+                $(".labelClass").each(function (c) {
+                    //alert(c);
+                    $(this).hovercard({
+                        showCustomCard: true,
+                        customCardJSON: {
+                            //image: document.getElementById(myFilterNames[c+1]).src,
+                            url: $('#url' + myFilterNames[c+1]).attr("href"),
+                            bio: $('#' + myFilterNames[c+1] + 'ShareBox').html()
+                        }
 
-
+                    })
+                });
                 //$("#label" + myFilterNames[1]).hovercard({
                 //    showCustomCard: true,
                 //    customCardJSON: {
@@ -192,23 +216,29 @@
                 //    }
                 //});
 
-                for (var c = 1; c < 13; c++) {
-                    $("#label"+myFilterNames[c]).hovercard({
-                        showCustomCard: true,
-                        customCardJSON: {
-                            image: document.getElementById(myFilterNames[c]).src,
-                            url: $('#url' + myFilterNames[c]).attr("href"),
-                            bio: $('#' + myFilterNames[c] + 'ShareBox').html()
-                        }
-                    });
-                }
+                //for (var c = 1; c < 13; c++) {
+                //    $("#label"+myFilterNames[c]).hovercard({
+                //        showCustomCard: true,
+                //        customCardJSON: {
+                //            image: document.getElementById(myFilterNames[c]).src,
+                //            url: $('#url' + myFilterNames[c]).attr("href"),
+                //            bio: $('#' + myFilterNames[c] + 'ShareBox').html()
+                //        }
+                //    });
+                //}
             }
         }
+
+        
+
+
         var fd = new FormData();
         fd.append("fileUpload", file);
         xmlhttp.open("POST", "Filters/GetThumbnails", true);
         xmlhttp.send(fd);
     }
+
+   
 
     function mouseyIsOver(e) {
             e.stopPropagation();
