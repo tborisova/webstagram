@@ -71,9 +71,9 @@
         //CSS for hover card. Change per your need, and move these styles to your stylesheet (recommended).
         if ($('#css-hovercard').length <= 0) {
             var hovercardTempCSS = '<style id="css-hovercard" type="text/css">' +
-                                    '.hc-preview { position: relative; display:inline; }' +
+                                    '.hc-preview {  position: relative; display:inline; }' +
                                     '.hc-name { font-weight:bold; position:relative; display:inline-block; }' +
-                                    '.hc-details { margin-top:0px; left:-3px; margin-right:0px; font-family:Sans-serif !important; font-size:12px !important; color:#666 !important; line-height:1.5em; border:solid 1px #ddd; position:absolute;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;top:-10px;padding:2em 10px 10px;-moz-box-shadow:5px 5px 5px #888;-webkit-box-shadow:5px 5px 5px #888;box-shadow:5px 5px 5px #888;display:none;}' +
+                                    '.hc-details { margin-top:0px; left:21px; top:-20px; margin-right:20px; margin-right:25px; font-family:Sans-serif !important; font-size:12px !important; color:#666 !important; line-height:1.5em; border:solid 1px #ddd; position:absolute;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;top:-10px;padding:2em 10px 10px;-moz-box-shadow:5px 5px 5px #888;-webkit-box-shadow:5px 5px 5px #888;box-shadow:5px 5px 5px #888;display:none;}' +
                                     '.hc-pic {  margin-top:-1em; float:right;  }' +
                                     '.hc-details-open-left { left: auto; right:-10px; text-align:right; margin-left:80px; margin-right:0; } ' +
                                     '.hc-details-open-left > .hc-pic { float:left; } ' +

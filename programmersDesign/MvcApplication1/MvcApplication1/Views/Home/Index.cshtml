@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Flowercam";
 }
 
 <table id="page">
@@ -18,12 +18,12 @@
                 </tr>
                 <tr>
                     <td>
-                        <img width="610" height="100" id="loginForm" src="../../Images/logInForm.png">
+                        <!--<img width="610" height="100" id="loginForm" src="../../Images/logInForm.png"> -->
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <img width="610" height="50" id="loginButton" src="../../Images/logInButton.png">
+                        <!--<img width="610" height="50" id="loginButton" src="../../Images/logInButton.png"> -->
                     </td>
                 </tr>
             </table>
@@ -153,6 +153,8 @@
                         img.className = "thumbnail";
                         img.id = myFilterNames[j];
                         img.style.width = "250px";
+                        img.style.marginRight = "25px";
+                        img.style.marginLeft = "25px";
                         img.src = arrayOfStrings[j];
 
                         //img.addEventListener("mouseover", mouseyIsOver, false);
