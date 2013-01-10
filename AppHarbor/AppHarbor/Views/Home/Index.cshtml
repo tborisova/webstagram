@@ -1,0 +1,206 @@
+﻿@{
+    ViewBag.Title = "Flowercam";
+}
+
+<table id="page">
+    <tr id="design">
+        <td class="ui">
+            <table id="table">
+                <tr>
+                    <td>
+                        <img id="logo" src="../../Images/Logo.png">
+                    </td>
+                </tr>
+                <tr id="dropField">
+                    <td>
+                        <img id="dropImg" src="../../Images/dropfield.png">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img width="300" id="loginForm" src="../../Images/logInForm.png">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img width="300" id="loginButton" src="../../Images/logInButton.png">
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td id="filters" style="display: none;">
+    </tr>
+</table>
+
+<script src="../../Scripts/jquery-1.8.3.js"></script>
+<script src="../../Scripts/jquery.hovercard.js"></script>
+
+<script>
+    var dropbox = document.getElementById('dropImg');
+    var myFilterNames = new Array(" ", "Invert", "Grayscale", "ComboGamma", "RedGamma", "GreenGamma", "BlueGammа", "Sepia", "Contrast", "TrueRealContrast", "FalseRealContrast", "PositiveBrightness", "NegativeBrightness");
+
+    // Setup drag and drop handlers.
+    dropbox.addEventListener('dragenter', stopDefault, false);
+    dropbox.addEventListener('dragover', stopDefault, false);
+    dropbox.addEventListener('dragleave', stopDefault, false);
+    dropbox.addEventListener('drop', onDrop, false);
+
+    function stopDefault(e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+
+    function onDrop(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+
+        var readFileSize = 0;
+        var files = e.dataTransfer.files;
+
+
+        file = files[0];
+        readFileSize += file.fileSize;
+
+        // Only process image files. 
+        var imageType = /image.*/;
+
+        if (!file.type.match(imageType)) {
+            return;
+        }
+
+        var reader = new FileReader();
+
+        reader.onerror = function (e) {
+            alert('Error code: ' + e.target.error);
+        };
+
+        // Create a closure to capture the file information. 
+        reader.onload = (function (aFile) {
+            return function (evt) {
+                //dropbox.src = evt.target.result;
+                // dropbox.style.height = "300px";
+                //document.getElementById("resultDiv").innerHTML = null;
+                //document.getElementById("DropField").innerHTML = null;
+            }
+        })(file);
+        loadXMLDoc(file);
+        // Read in the image file as a data url. 
+        reader.readAsDataURL(file);
+    }
+    function loadXMLDoc(file) {
+        var reader = new FileReader(file);
+        var xmlhttp;
+        var txt, x, i;
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        }
+        else {// code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var response = xmlhttp.responseText;
+                var arrayOfStrings = response.split(" ");
+                //alert("Filters applied for:" + arrayOfStrings[0] + " miliseconds!");
+                //alert("Lenght:" + arrayOfStrings.length);
+                var img;
+                var i, j;
+                var a;
+                var table = document.createElement("table");
+                table.id = "resultTable";
+                var tr;
+                var td;
+                var shareTable;
+                var share;
+                var FB;
+                var twitter;
+                var GP;
+                var filterName
+
+                var nameLabel;
+                $("#page").animate({ marginLeft: "0px" }, "slow", "swing");
+                $("#logo").animate({ width: "325px" }, "slow", "swing");
+                $("#dropImg").animate({ width: "300px" }, "slow", "swing");
+                $("#loginForm").animate({ width: "300px" }, "slow", "swing");
+                $("#loginButton").animate({ width: "300px" }, "slow", "swing");
+
+                document.getElementById("filters").innerHTML = null;
+                for (i = 1; i < 13; i += 4) {
+                    tr = document.createElement("tr");
+                    for (j = i; j < i + 4; j++) {
+                        td = document.createElement("td");
+                        td.className = "resultCombo";
+                        filterName = document.createElement("label");
+                        filterName.textContent = myFilterNames[j];
+                        filterName.className = "filterName";
+                        td.appendChild(filterName);
+                        filterName.style.display = "none";
+                        a = document.createElement("a");
+                        a.id = "url" + myFilterNames[j];
+                        a.className = "thumbnailLink";
+                        a.href = "../../Filters/" + myFilterNames[j];
+
+                        img = document.createElement("img");
+                        img.className = "thumbnail";
+                        img.id = myFilterNames[j];
+                        img.style.width = "250px";
+                        img.src = arrayOfStrings[j];
+
+                        a.appendChild(img);
+
+                        nameLabel = document.createElement("label");
+                        nameLabel.id = "label" + myFilterNames[j];
+                        nameLabel.className = "labelClass";
+                        var someshittydiv = document.createElement("div");
+                        someshittydiv.innerHTML = "<p>" + myFilterNames[j];
+
+                        nameLabel.appendChild(a);
+                        nameLabel.appendChild(someshittydiv);
+                        td.appendChild(nameLabel);
+                        FB = document.createElement("img");
+                        FB.src = "../../Images/FBShare.png";
+
+                        twitter = document.createElement("img");
+                        twitter.src = "../../Images/TwitterShare.png";
+
+                        GP = document.createElement("img");
+                        GP.src = "../../Images/GShare.png";
+
+                        share = document.createElement("div");
+                        share.className = "sharebox";
+                        share.id = myFilterNames[j] + "ShareBox";
+                        share.appendChild(FB);
+                        share.innerHTML += " ";
+                        share.appendChild(twitter);
+                        share.innerHTML += " ";
+                        share.appendChild(GP);
+                        share.style.display = "none";
+                        td.appendChild(share);
+                        tr.appendChild(td);
+
+                    }
+                    table.appendChild(tr);
+                }
+                document.getElementById("filters").appendChild(table);
+                $('#filters').show('slow');
+                $(".labelClass").each(function (c) {
+                    $(this).hovercard({
+                        showCustomCard: true,
+                        customCardJSON: {
+                            url: $('#url' + myFilterNames[c + 1]).attr("href"),
+                            bio: $('#' + myFilterNames[c + 1] + 'ShareBox').html()
+                        }
+
+                    })
+                });
+            }
+        }
+
+        var fd = new FormData();
+        fd.append("fileUpload", file);
+        xmlhttp.open("POST", "Filters/GetThumbnails", true);
+        xmlhttp.send(fd);
+    }
+
+</script>
