@@ -167,6 +167,7 @@
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Images\dropfield.png" />
+    <Content Include="Images\favicon.ico" />
     <Content Include="Images\FBShare.png" />
     <Content Include="Images\GShare.png" />
     <Content Include="Images\logInButton.png" />
