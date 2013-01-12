@@ -10,10 +10,21 @@ using System.Diagnostics;
 
 namespace CustomApplyFilterExtension
 {
+    /// <summary>
+    /// Creates the response of the HTTP Image Filtering Request.
+    /// </summary>
     public static class CustomApplyFilters
     {
+        /// <summary>
+        /// Creates a custom ImageProcessor that applies the filters.
+        /// </summary>
         public static ImageProcessor imageProcessor = new ImageProcessor();
 
+        /// <summary>
+        /// Returns all filtered images as an ssv format string.
+        /// </summary>
+        /// <param name="img">The Bitmap image to apply the filters to.</param>
+        /// <returns>A ssv format string containing all filtered images</returns>
         public static string ApplyFilters(this Bitmap img)
         {
             imageProcessor.SetImage(img);
@@ -50,6 +61,11 @@ namespace CustomApplyFilterExtension
             return result;
         }
 
+        /// <summary>
+        /// Converts a Bitmap image to a String.
+        /// </summary>
+        /// <param name="img">The Bitmpa image to be converted.</param>
+        /// <returns>A string containing the data of the Bitmap image as ASCII chars.</returns>
         private static string BitmapToString(Bitmap img)
         {
             string bitmapString = null;
