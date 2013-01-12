@@ -12,6 +12,7 @@ using ImageProcessing;
 
 namespace MvcApplication1.Controllers
 {
+    // A Controller for the Click2Download functionality of the app
     public class FiltersController : Controller
     {
         // GET: /Filters/
@@ -44,20 +45,6 @@ namespace MvcApplication1.Controllers
                 g.DrawImage(sourceBMP, 0, 0, width, height);
             return result;
         }
-
-
-        //public FileResult ApplyFilter1(HttpPostedFileBase filterUpload)
-        //{   //invert
-        //    var stream = filterUpload.InputStream;
-        //    Bitmap img = new Bitmap(stream);
-        //    var ip = new ImageProcessor();
-        //    ip.SetImage(img);
-        //    var result = ip.Invert();
-        //    MemoryStream str = new MemoryStream();
-        //    result.Save(str, ImageFormat.Png);
-        //    str.Close();
-        //    return File(str.GetBuffer(),"application/octet-stream", string.Format("{0}_inverted.png", Path.GetFileNameWithoutExtension(filterUpload.FileName)));
-        //}
 
         public FileResult Invert(HttpPostedFileBase filterUploads)
         {

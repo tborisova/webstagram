@@ -68,8 +68,8 @@
         // Create a closure to capture the file information. 
         reader.onload = (function (aFile) {
             return function (evt) {
-                //dropbox.src = evt.target.result;
-                // dropbox.style.height = "300px";
+                  dropbox.src = evt.target.result;
+                  dropbox.style.width = "300px";
                 //document.getElementById("resultDiv").innerHTML = null;
                 //document.getElementById("DropField").innerHTML = null;
             }
@@ -88,12 +88,11 @@
         else {// code for IE6, IE5
             xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
         }
-        xmlhttp.onreadystatechange = function () {
+        xmlhttp.onreadystatechange = function () { // Processing the response
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 var response = xmlhttp.responseText;
                 var arrayOfStrings = response.split(" ");
                 //alert("Filters applied for:" + arrayOfStrings[0] + " miliseconds!");
-                //alert("Lenght:" + arrayOfStrings.length);
                 var img;
                 var i, j;
                 var a;
@@ -114,22 +113,22 @@
                 $("#dropImg").animate({ width: "300px" }, "slow", "swing");
 
                 document.getElementById("filters").innerHTML = null;
-                for (i = 1; i < 13; i += 4) {
+                for (i = 1; i < 13; i += 4) { // Shows all filtered images form the response
                     tr = document.createElement("tr");
                     for (j = i; j < i + 4; j++) {
-                        td = document.createElement("td");
+                        td = document.createElement("td"); // Creates a table data element
                         td.className = "resultCombo";
-                        filterName = document.createElement("label");
+                        filterName = document.createElement("label"); // Creates the filter label for the filter
                         filterName.textContent = myFilterNames[j];
                         filterName.className = "filterName";
                         td.appendChild(filterName);
                         filterName.style.display = "none";
-                        a = document.createElement("a");
+                        a = document.createElement("a"); // Creates the save link for the image
                         a.id = "url" + myFilterNames[j];
                         a.className = "thumbnailLink";
                         a.href = "../../Filters/" + myFilterNames[j];
 
-                        img = document.createElement("img");
+                        img = document.createElement("img"); // Creates the image and it's properties
                         img.className = "thumbnail";
                         img.id = myFilterNames[j];
                         img.style.width = "250px";
@@ -137,7 +136,7 @@
 
                         a.appendChild(img);
 
-                        nameLabel = document.createElement("label");
+                        nameLabel = document.createElement("label"); // Creates the text label for the image
                         nameLabel.id = "label" + myFilterNames[j];
                         nameLabel.className = "labelClass";
                         var someshittydiv = document.createElement("div");
@@ -146,16 +145,16 @@
                         nameLabel.appendChild(a);
                         nameLabel.appendChild(someshittydiv);
                         td.appendChild(nameLabel);
-                        FB = document.createElement("img");
+                        FB = document.createElement("img"); // Creates the Facebook share image 
                         FB.src = "../../Images/FBShare.png";
 
-                        twitter = document.createElement("img");
+                        twitter = document.createElement("img"); // Creates the Twitter share image
                         twitter.src = "../../Images/TwitterShare.png";
 
-                        GP = document.createElement("img");
+                        GP = document.createElement("img"); // Creates the Google+ share image
                         GP.src = "../../Images/GShare.png";
 
-                        share = document.createElement("div");
+                        share = document.createElement("div"); // Creates a "Share Box" for all social netowork sharing images
                         share.className = "sharebox";
                         share.id = myFilterNames[j] + "ShareBox";
                         share.appendChild(FB);
@@ -170,9 +169,9 @@
                     }
                     table.appendChild(tr);
                 }
-                document.getElementById("filters").appendChild(table);
-                $('#filters').show('slow');
-                $(".labelClass").each(function (c) {
+                document.getElementById("filters").appendChild(table);  
+                $('#filters').show('slow'); 
+                $(".labelClass").each(function (c) {  // Creates the hovering boxes for sharing
                     $(this).hovercard({
                         showCustomCard: true,
                         customCardJSON: {
@@ -184,8 +183,8 @@
                 });
             }
         }
-
-        var fd = new FormData();
+        // An HTTP POST Request to the server with the dropped image named as "file"
+        var fd = new FormData(); 
         fd.append("fileUpload", file);
         xmlhttp.open("POST", "Filters/GetThumbnails", true);
         xmlhttp.send(fd);
